@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ConfigurationResource\Pages;
 use App\Filament\Resources\ConfigurationResource\RelationManagers;
+use App\Filament\Resources\ConfigurationResource\RelationManagers\CategoriesRelationManager;
 use App\Models\Configuration;
 use Filament\Forms;
 use Filament\Forms\Components\FileUpload;
@@ -55,9 +56,7 @@ class ConfigurationResource extends Resource
 
     public static function getRelations(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 
     public static function getPages(): array

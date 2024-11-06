@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Category;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -11,9 +12,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('customers', function (Blueprint $table) {
+        Schema::create('blocks', function (Blueprint $table) {
             $table->id();
-            $table->string('email');
+            $table->foreignIdFor(Category::class)->constrained()->cascadeOnDelete();
+            $table->string('name');
+            $table->string('slug');
+            $table->string('image_path');
+            $table->longText('description');
+            $table->string('link');
             $table->timestamps();
         });
     }
@@ -23,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('customers');
+        Schema::dropIfExists('blocks');
     }
 };

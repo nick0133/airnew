@@ -9,9 +9,9 @@ use App\Http\Controllers\PagesController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SearchController;
 use App\Imports\ProductsImport;
+use App\Models\Category;
 use Illuminate\Support\Facades\Route;
 use Maatwebsite\Excel\Facades\Excel;
-use Illuminate\Support\Facades\Log;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -24,7 +24,7 @@ use Illuminate\Support\Facades\Log;
 */
 
 Route::get('/test', function () {
-    return Excel::download(new ProductsExport(2), "products-test.xlsx");
+    return;
 });
 
 Route::get('/products/export', function (\Illuminate\Http\Request $request) {
