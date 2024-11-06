@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Block;
 use App\Models\Category;
 use App\Models\Configuration;
 use Illuminate\Http\Request;
@@ -36,7 +37,8 @@ class CatalogController extends Controller
                 $keys = $category->keys();
                 $agent = new Agent();
                 $slider_items = $agent->isMobile() ? 2 : 7;
-                return view('pages.catalog-item', compact('category', 'products', 'keys', 'slider_items'));
+                $blocks = Block::where('category_id', '=', $id)->get();
+                return view('pages.catalog-item', compact('category', 'products', 'keys', 'slider_items', 'blocks'));
             }
         } else {
             $category = Category::bySlug($slug, 1);

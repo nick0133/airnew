@@ -69,20 +69,23 @@
                             <h2 class="h2_sale_slider">Вам может пригодиться</h2>
                             <div class="swiper second-swiper">
                                 <div class="swiper-wrapper">
+                                    @foreach ($blocks as $block)
+                                        <div class="swiper-slide">
+                                            <img src={!! '/storage/' . $block->image_path !!} alt={!! $block->name !!}
+                                                class="sliders_img" />
+                                            <p class="fz13px p_500 desc_sale_slider">
+                                                {!! $block->description !!}
+                                            </p>
+                                        </div>
+                                    @endforeach
+                                    {{-- 
                                     <div class="swiper-slide">
                                         <img src="/images/maslo.png" alt="" class="sliders_img" />
                                         <p class="fz13px p_500 desc_sale_slider">
                                             Масло для винтовых и роторно-пластинчатых воздушных
                                             компрессоров
                                         </p>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <img src="/images/maslo.png" alt="" class="sliders_img" />
-                                        <p class="fz13px p_500 desc_sale_slider">
-                                            Масло для винтовых и роторно-пластинчатых воздушных
-                                            компрессоров
-                                        </p>
-                                    </div>
+                                    </div> --}}
                                 </div>
 
                                 <div class="swiper-button-prev second-swiper-prev"></div>

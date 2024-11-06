@@ -9,6 +9,7 @@ use Filament\Forms;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -30,11 +31,11 @@ class BlockResource extends Resource
 
     public static function form(Form $form): Form
     {
-        return $form
+        return $form->columns(1)
             ->schema([
                 TextInput::make('name'),
                 Select::make('category_id')->relationship('category', 'name', fn(Builder $query) => $query->where('parent_id', '<>', 'null')),
-                RichEditor::make('description'),
+                Textarea::make('description'),
                 FileUpload::make('image_path')->image()->imageEditor()->imagePreviewHeight('100%')->directory('blocks'),
                 TextInput::make('link'),
             ]);
