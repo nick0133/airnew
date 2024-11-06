@@ -70,13 +70,13 @@
                             <div class="swiper second-swiper">
                                 <div class="swiper-wrapper">
                                     @foreach ($blocks as $block)
-                                        <div class="swiper-slide">
+                                        <a target="_blank" href={{ $block->link }} class="swiper-slide">
                                             <img src={!! '/storage/' . $block->image_path !!} alt={!! $block->name !!}
                                                 class="sliders_img" />
                                             <p class="fz13px p_500 desc_sale_slider">
                                                 {!! $block->description !!}
                                             </p>
-                                        </div>
+                                        </a>
                                     @endforeach
                                     {{-- 
                                     <div class="swiper-slide">
