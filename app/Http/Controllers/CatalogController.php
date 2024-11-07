@@ -37,8 +37,11 @@ class CatalogController extends Controller
                 $keys = $category->keys();
                 $agent = new Agent();
                 $slider_items = $agent->isMobile() ? 2 : 7;
-                $blocks = Block::where('category_id', '=', $id)->get();
-                return view('pages.catalog-item', compact('category', 'products', 'keys', 'slider_items', 'blocks'));
+                $slides = Block::where('category_id', '=', $id)->pluck('slides')->toArray();
+                $slides = array_merge(...array_map(function ($s) {
+                    return $s;
+                }, $slides));;
+                return view('pages.catalog-item', compact('category', 'products', 'keys', 'slider_items', 'slides'));
             }
         } else {
             $category = Category::bySlug($slug, 1);

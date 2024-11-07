@@ -63,22 +63,22 @@
                             {!! $category->down_text2 !!}
                         </div>
                     </div>
-
                     <div class="col-md-4">
-                        <div class="slider_sale">
-                            <h2 class="h2_sale_slider">Вам может пригодиться</h2>
-                            <div class="swiper second-swiper">
-                                <div class="swiper-wrapper">
-                                    @foreach ($blocks as $block)
-                                        <a target="_blank" href={{ $block->link }} class="swiper-slide">
-                                            <img src={!! '/storage/' . $block->image_path !!} alt={!! $block->name !!}
-                                                class="sliders_img" />
-                                            <p class="fz13px p_500 desc_sale_slider">
-                                                {!! $block->description !!}
-                                            </p>
-                                        </a>
-                                    @endforeach
-                                    {{-- 
+                        @if (!empty($slides))
+                            <div class="slider_sale">
+                                <h2 class="h2_sale_slider">Вам может пригодиться</h2>
+                                <div class="swiper second-swiper">
+                                    <div class="swiper-wrapper">
+                                        @foreach ($slides as $slide)
+                                            <a target="_blank" href={{ $slide['link'] }} class="swiper-slide">
+                                                <img src={!! '/storage/' . $slide['image_path'] !!} alt={!! $slide['name'] !!}
+                                                    class="sliders_img" />
+                                                <p class="fz13px p_500 desc_sale_slider">
+                                                    {!! $slide['description'] !!}
+                                                </p>
+                                            </a>
+                                        @endforeach
+                                        {{-- 
                                     <div class="swiper-slide">
                                         <img src="/images/maslo.png" alt="" class="sliders_img" />
                                         <p class="fz13px p_500 desc_sale_slider">
@@ -86,12 +86,13 @@
                                             компрессоров
                                         </p>
                                     </div> --}}
-                                </div>
+                                    </div>
 
-                                <div class="swiper-button-prev second-swiper-prev"></div>
-                                <div class="swiper-button-next second-swiper-next"></div>
+                                    <div class="swiper-button-prev second-swiper-prev"></div>
+                                    <div class="swiper-button-next second-swiper-next"></div>
+                                </div>
                             </div>
-                        </div>
+                        @endif
                     </div>
                 </div>
             </div>

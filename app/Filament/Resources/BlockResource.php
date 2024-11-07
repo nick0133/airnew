@@ -7,11 +7,13 @@ use App\Filament\Resources\BlockResource\RelationManagers;
 use App\Models\Block;
 use Filament\Forms;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Navigation\NavigationItem;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
@@ -29,16 +31,26 @@ class BlockResource extends Resource
     {
         return __('Blocks');
     }
-
     public static function form(Form $form): Form
     {
         return $form->columns(1)
             ->schema([
-                TextInput::make('name'),
                 Select::make('category_id')->relationship('category', 'name', fn(Builder $query) => $query->where('parent_id', '<>', 'null')),
-                Textarea::make('description'),
-                FileUpload::make('image_path')->image()->imageEditor()->imagePreviewHeight('100%')->directory('blocks'),
-                TextInput::make('link'),
+                Repeater::make('slides')
+                    ->label('Slides')
+                    ->schema([
+                        TextInput::make('name')
+                            ->label('Name')
+                            ->required(),
+                        Textarea::make('description')
+                            ->label('Description')
+                            ->nullable(),
+                        FileUpload::make('image_path')->image()->imageEditor()->imagePreviewHeight('100%')->directory('slides')->columnSpan('full')->required(),
+                        TextInput::make('link')
+                            ->label('Link')
+                            ->nullable(),
+                    ])->addable()
+                    ->required(),
             ]);
     }
 
@@ -46,7 +58,6 @@ class BlockResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name')->searchable(),
                 TextColumn::make('category.name'),
             ])
             ->filters([
