@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\BlockResource\Pages;
 use App\Filament\Resources\BlockResource\RelationManagers;
 use App\Models\Block;
+use App\Models\Category;
 use Filament\Forms;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Repeater;
@@ -13,6 +14,8 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
 use Filament\Navigation\NavigationItem;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -36,7 +39,13 @@ class BlockResource extends Resource
     {
         return $form->columns(1)
             ->schema([
-                Select::make('category_id')->relationship('category', 'name', fn(Builder $query) => $query->where('parent_id', '<>', 'null')),
+                Select::make('category_id')->relationship('category', 'name', fn(Builder $query) => $query->where('parent_id', '<>', 'null'))->afterStateUpdated(function (Get $get, Set $set) {
+                    $slides = Category::find($get('category_id'))->block()->get(['slides'])->toArray()[0]['slides'];
+                    // dd($slides);
+                    if (!empty($slides)) {
+                        $set('slides', $slides);
+                    }
+                })->live(),
                 Repeater::make('slides')
                     ->label('Slides')
                     ->schema([

@@ -10,6 +10,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SearchController;
 use App\Imports\ProductsImport;
 use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 use Maatwebsite\Excel\Facades\Excel;
 /*
@@ -23,9 +24,6 @@ use Maatwebsite\Excel\Facades\Excel;
 |
 */
 
-Route::get('/test', function () {
-    return;
-});
 
 Route::get('/products/export', function (\Illuminate\Http\Request $request) {
     // Проверяем, что запрос подписан корректно

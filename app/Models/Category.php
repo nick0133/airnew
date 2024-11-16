@@ -9,7 +9,11 @@ use Spatie\Sluggable\SlugOptions;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use App\Models\Product;
+use App\Observers\CategoryObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
+#[ObservedBy([CategoryObserver::class])]
 class Category extends Model implements HasMedia
 {
     use HasSlug;
@@ -167,5 +171,10 @@ class Category extends Model implements HasMedia
     {
         $res = self::where('name', 'like', '%' . $search_string . '%')->get();
         return $res;
+    }
+
+    public function block(): HasOne
+    {
+        return $this->hasOne(Block::class);
     }
 }
