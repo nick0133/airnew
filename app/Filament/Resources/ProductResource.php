@@ -79,7 +79,7 @@ class ProductResource extends Resource
                         Forms\Components\TextInput::make('code')->hidden(),
                         Forms\Components\TextInput::make('value'),
                     ])
-                    ->grid(3)->addable(false)->deletable(false)->reorderable(false)->key('values')
+                    ->grid(3)->addable(false)->deletable(true)->reorderable(false)->key('values')
                     ->itemLabel(fn(array $state): ?string => $state['name'] ?? null),
                 FileUpload::make('image_path')->image()->imageEditor()->imagePreviewHeight('100%')->directory('categories'),
             ]);

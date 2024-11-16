@@ -24,6 +24,14 @@ use Maatwebsite\Excel\Facades\Excel;
 |
 */
 
+Route::get('/test', function () {
+    $products = Category::find(2)->products()->first();
+    dd($products);
+    // $products->each(function($product)  {
+    //     $product->values
+    // });
+});
+
 
 Route::get('/products/export', function (\Illuminate\Http\Request $request) {
     // Проверяем, что запрос подписан корректно

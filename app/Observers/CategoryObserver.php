@@ -28,7 +28,7 @@ class CategoryObserver
                 $slug => [
                     "name" => $key,
                     "code" => $slug,
-                    "value" => "test"
+                    "value" => ""
                 ]
             ];
         })->toArray();
