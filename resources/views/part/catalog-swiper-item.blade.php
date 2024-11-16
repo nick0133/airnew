@@ -4,7 +4,7 @@
         <p class="text_blue_td_flow text_slide"></p>
         <p class="text_blue_td_flow text_slide"></p>
         <p class="text_blue_td_flow text_slide"></p>
-        @foreach($keys as $key => $value)
+        @foreach ($keys as $key => $value)
             <p class="text_blue_td_flow text_slide fz13px p_700">
                 {{ $value[0] }}
             </p>
@@ -47,21 +47,36 @@
                                         <img src="/images/plug.png" alt="" />
                                     </div>
                                 @endif
-                                @foreach ($keys as $key => $value)
+                                @foreach (json_decode($product['values'], 1) as $value)
+                                    <div class="text_blue_td">
+                                        @if (array_key_exists('value', $value))
+                                            {{ is_array($value['value']) ? (implode(' / ', $value['value']) ?: '-') : $value['value'] }}
+                                        @else
+                                            test
+                                        @endif
+                                    </div>
+                                @endforeach
+                                {{-- @foreach ($keys as $key => $value)
                                     <div class="text_blue_td">
                                         {{ is_array($product[$key]['value']) ? (implode(' / ', $product[$key]['value']) ?: '-') : ($product[$key]['value'] ?: '-') }}
                                     </div>
-                                @endforeach
+                                @endforeach --}}
                             </div>
                             <div class="footer">
                                 <div class="footer-input-section">
-                                    <input class="footer-input" type="number" value="0" id="product-{{ $product['id'] }}-quantity" step="1" name="" />
+                                    <input class="footer-input" type="number" value="0"
+                                        id="product-{{ $product['id'] }}-quantity" step="1" name="" />
                                     <div class="buttons-section">
-                                        <button class="increment footer-button" onclick="incrementProductQuantity({{ $product['id'] }})" data-action="increment"></button>
-                                        <button class="decrement footer-button" onclick="decrementProductQuantity({{ $product['id'] }})" data-action="decrement"></button>
+                                        <button class="increment footer-button"
+                                            onclick="incrementProductQuantity({{ $product['id'] }})"
+                                            data-action="increment"></button>
+                                        <button class="decrement footer-button"
+                                            onclick="decrementProductQuantity({{ $product['id'] }})"
+                                            data-action="decrement"></button>
                                     </div>
                                 </div>
-                                <button onclick="addProductToCart(this, {{ $product['id'] }})" class="add-button footer-button">Добавить</button>
+                                <button onclick="addProductToCart(this, {{ $product['id'] }})"
+                                    class="add-button footer-button">Добавить</button>
                             </div>
                         </div>
                     </div>

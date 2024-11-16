@@ -34,18 +34,19 @@ class CatalogController extends Controller
                 return redirect()->route('catalog.id', ['slug' => $category->slug]);
             } else {
                 $products = $category->findProducts($id);
-                $keys = $category->keys();
+                $keys = $category->getKeys();
+                // dd($keys);
                 $agent = new Agent();
                 $slider_items = $agent->isMobile() ? 2 : 7;
                 $slides = Block::where('category_id', '=', $id)->pluck('slides')->toArray();
                 $slides = array_merge(...array_map(function ($s) {
                     return $s;
-                }, $slides));;
+                }, $slides));
                 return view('pages.catalog-item', compact('category', 'products', 'keys', 'slider_items', 'slides'));
             }
         } else {
             $category = Category::bySlug($slug, 1);
         }
-        return view('pages.catalog')->with($category);
+        return view(view: 'pages.catalog')->with($category);
     }
 }

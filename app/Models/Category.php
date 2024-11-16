@@ -121,6 +121,20 @@ class Category extends Model implements HasMedia
         })->toArray();
         return $products;
     }
+
+    public function getKeys()
+    {
+        $productValues = collect($this->products()->first('values')->values);
+        return $productValues->mapWithKeys(function ($value, $key) {
+            return [
+                $key => [
+                    $value['name'] ?? '', // Название параметра
+                    '' // Пустое значение
+                ]
+            ];
+        })->toArray();
+    }
+
     public function keys($category = 0)
     {
         if ($category == 0) $category = $this;
