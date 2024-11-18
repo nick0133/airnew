@@ -1,9 +1,11 @@
 <section id="top-menu">
     <div class="top_menu">
         <ul class="nav top_menu_nav justify-content-center">
-            <li class="nav-item"><a href="#" class="nav-link top_menu_link">Сертификаты, лицензии</a></li>
-            <li class="nav-item"><a href="#" class="nav-link top_menu_link">Как проехать в офис</a></li>
-            <li class="nav-item"><a href="#" class="nav-link top_menu_link">Доставка</a></li>
+            <li class="nav-item"><a href={{ route('pages.licenses') }} class="nav-link top_menu_link">Сертификаты,
+                    лицензии</a></li>
+            <li class="nav-item"><a href={{ route('pages.office') }} class="nav-link top_menu_link">Как проехать в
+                    офис</a></li>
+            <li class="nav-item"><a href={{ route('pages.delivery') }} class="nav-link top_menu_link">Доставка</a></li>
             <li class="nav-item"><a href="#" class="nav-link spec_top_link">Подобрать фильтр</a></li>
             <li class="nav-item"><a href="#" class="nav-link spec_top_link sal">Подобрать сальник</a></li>
             <div class="carts mt-2 my-lg-0 cart_mob">
@@ -40,8 +42,7 @@
                     </div>
                     <div class="callback_mob">
                         <p>
-                            <a href="#" class="btn_call btn" data-toggle="modal"
-                                data-target="#recall">Перезвоните
+                            <a href="#" class="btn_call btn" data-toggle="modal" data-target="#recall">Перезвоните
                                 мне</a>
                         </p>
                     </div>
@@ -72,8 +73,8 @@
                                 @foreach (\App\Models\Category::parentGet()->where('published', true)->get() as $category)
                                     <a href="{{ route('catalog.id', $category->slug) }}">
                                         <span class="nav_menu_icons">
-                                            <img src="{{ $category->image_path }}"
-                                                alt="{{ $category->name }}" class="svg1">
+                                            <img src="{{ $category->image_path }}" alt="{{ $category->name }}"
+                                                class="svg1">
                                         </span>
                                         <span class="nav_menu_names">{{ $category->name }}</span>
                                     </a>
@@ -118,8 +119,8 @@
                                 @foreach (\App\Models\Category::parentGet()->where('published', true)->get() as $category)
                                     <a href="{{ route('catalog.id', $category->slug) }}">
                                         <span class="nav_menu_icons">
-                                            <img src="{{ $category->image_path }}"
-                                                alt="{{ $category->name }}" class="svg1">
+                                            <img src="{{ $category->image_path }}" alt="{{ $category->name }}"
+                                                class="svg1">
                                         </span>
                                         <span class="nav_menu_names">{{ $category->name }}</span>
                                     </a>
@@ -196,8 +197,7 @@
                 </div>
                 <div class="callback">
                     <p>
-                        <a href="#" class="btn_call btn" data-toggle="modal"
-                            data-target="#recall">Перезвоните
+                        <a href="#" class="btn_call btn" data-toggle="modal" data-target="#recall">Перезвоните
                             мне</a>
                     </p>
                 </div>
@@ -209,8 +209,8 @@
                             </span>
                             <button type="submit" class="btn btn-search-input">Найти</button>
                         </div>
-                        <input id="query" name="query" type="text" class="form-control"
-                            placeholder="" aria-label="Username" aria-describedby="basic-addon1">
+                        <input id="query" name="query" type="text" class="form-control" placeholder=""
+                            aria-label="Username" aria-describedby="basic-addon1">
                     </div>
                 </form>
                 <div class="d-flex lk_icon">

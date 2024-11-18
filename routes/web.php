@@ -55,6 +55,9 @@ Route::get('/equipment-rent', [PagesController::class, 'rent'])->name('pages.ren
 Route::get('/service-and-repair', [PagesController::class, 'service'])->name('pages.service');
 Route::get('/cart', [PagesController::class, 'cart'])->name('pages.cart');
 Route::post('/cart', [PagesController::class, 'submitCart'])->name('pages.submit-cart');
+Route::get('/delivery', [PagesController::class, 'delivery'])->name('pages.delivery');
+Route::get('/office', [PagesController::class, 'office'])->name('pages.office');
+Route::get('/licenses', [PagesController::class, 'licenses'])->name('pages.licenses');
 
 
 Route::any('/catalog/{slug}/{id?}', [\App\Http\Controllers\CatalogController::class, 'index'])->name('catalog.id');

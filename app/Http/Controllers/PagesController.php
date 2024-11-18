@@ -92,4 +92,18 @@ class PagesController extends Controller
         $this->cartService->save(collect());
         return view('cart.modal_success');
     }
+
+    public function delivery()
+    {
+        return view('pages.delivery');
+    }
+
+    public function office()
+    {
+        return view('pages.office');
+    }
+    public function licenses()
+    {
+        return view('pages.licenses');
+    }
 }
