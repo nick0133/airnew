@@ -1,15 +1,10 @@
 <?php
 
-use App\Exports\CustomersExport;
 use App\Exports\ProductsExport;
-use App\Exports\TestExport;
 use App\Http\Controllers\CartController;
-use App\Http\Controllers\ContactsController;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SearchController;
-use App\Imports\ProductsImport;
-use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 use Maatwebsite\Excel\Facades\Excel;
@@ -25,7 +20,7 @@ use Maatwebsite\Excel\Facades\Excel;
 */
 
 Route::get('/test', function () {
-    $products = Category::find(2)->products()->first();
+    $products = Product::first()->values;
     dd($products);
     // $products->each(function($product)  {
     //     $product->values

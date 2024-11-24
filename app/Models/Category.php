@@ -124,16 +124,26 @@ class Category extends Model implements HasMedia
 
     public function getKeys()
     {
+        // Get the list of disabled filters
+        $disabledFilters = Configuration::first()->pluck('disable_filters')->flatten()->toArray();
+
+        // Retrieve the product values
         $productValues = collect($this->products()->first('values')->values);
-        return $productValues->mapWithKeys(function ($value, $key) {
+
+        // Filter out any values where the 'code' matches one of the disabled filters
+        return $productValues->filter(function ($value, $key) use ($disabledFilters) {
+            // Check if the 'code' of the product value is in the disabled filters
+            return !in_array($value['code'], $disabledFilters);
+        })->mapWithKeys(function ($value, $key) {
             return [
                 $key => [
-                    $value['name'] ?? '', // Название параметра
-                    '' // Пустое значение
+                    $value['name'] ?? '', // Parameter name
+                    '' // Empty value
                 ]
             ];
         })->toArray();
     }
+
 
     public function keys($category = 0)
     {
