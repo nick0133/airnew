@@ -49,14 +49,14 @@
                                 @endif
                                 {{-- @dd($disabledFilters) --}}
                                 @foreach (json_decode($product['values'], 1) as $value)
-                                    <div class="text_blue_td">
-                                        @if (!in_array($value['code'], $disabledFilters))
+                                    @if (!in_array($value['code'], $disabledFilters))
+                                        <div class="text_blue_td">
                                             @if (array_key_exists('value', $value))
                                                 {{ is_array($value['value']) ? (implode(' / ', $value['value']) ?: '-') : $value['value'] }}
                                             @endif
-                                        @endif
 
-                                    </div>
+                                        </div>
+                                    @endif
                                 @endforeach
                                 {{-- @foreach ($keys as $key => $value)
                                     <div class="text_blue_td">
