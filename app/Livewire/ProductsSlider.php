@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Category;
+use App\Models\Configuration;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Livewire\Component;
@@ -18,6 +19,8 @@ class ProductsSlider extends Component
     public $fromto = 0;
     public $products;
 
+    public $disabledFilters;
+
     public $allproducts = [];
 
     public $slidesPerView = 7;
@@ -32,6 +35,8 @@ class ProductsSlider extends Component
 
     public function mount(Request $request)
     {
+        $this->disabledFilters = Configuration::first()->pluck('disable_filters')->flatten()->toArray();
+
         $this->slug = $request->slug;
         $this->id = is_null($request->id) ? 0 : $request->id;
         if (!$this->fromto) $this->search();

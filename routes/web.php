@@ -20,8 +20,8 @@ use Maatwebsite\Excel\Facades\Excel;
 */
 
 Route::get('/test', function () {
-    $products = Product::first()->values;
-    dd($products);
+    $products = Product::find(1);
+    dd($products->values);
     // $products->each(function($product)  {
     //     $product->values
     // });
