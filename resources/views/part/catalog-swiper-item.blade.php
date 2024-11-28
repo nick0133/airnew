@@ -47,7 +47,7 @@
                                         <img src="/images/plug.png" alt="" />
                                     </div>
                                 @endif
-                                {{-- @dd($disabledFilters) --}}
+                                @dd($disabledFilters, $product)
                                 @foreach (json_decode($product['values'], 1) as $value)
                                     @if (!in_array($value['code'], $disabledFilters))
                                         <div class="text_blue_td">
