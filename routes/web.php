@@ -19,13 +19,7 @@ use Maatwebsite\Excel\Facades\Excel;
 |
 */
 
-Route::get('/test', function () {
-    $products = Product::find(1);
-    dd($products->values);
-    // $products->each(function($product)  {
-    //     $product->values
-    // });
-});
+Route::get('/test', function () {});
 
 
 Route::get('/products/export', function (\Illuminate\Http\Request $request) {
