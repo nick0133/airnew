@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Category;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class CategoryObserver
@@ -19,6 +20,16 @@ class CategoryObserver
      */
     public function updated(Category $category): void
     {
+        if (is_null($category->parent_id)) {
+            $show_keys = $category->show_keys;
+
+            // Обновляем ключи у всех дочерних категорий
+            $children = Category::where('parent_id', $category->id)->get();
+
+            foreach ($children as $child) {
+                $child->update(['show_keys' => $show_keys]);
+            }
+        }
         $originalKeys = collect($category->getOriginal('show_keys')); // Преобразуем в коллекцию для удобства
         $keys = collect($category->show_keys); // Текущее состояние также в коллекцию
         $changes = $keys->diffKeys($originalKeys);
