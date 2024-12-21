@@ -30,10 +30,16 @@ class CategoryObserver
                 $child->update(['show_keys' => $show_keys]);
             }
         }
-        $originalKeys = collect($category->getOriginal('show_keys')); // Преобразуем в коллекцию для удобства
-        $keys = collect($category->show_keys); // Текущее состояние также в коллекцию
-        $changes = $keys->diffKeys($originalKeys);
-        $values = $changes->mapWithKeys(function ($value, $key) {
+
+        $originalKeys = collect($category->getOriginal('show_keys')); // Оригинальная коллекция
+        $keys = collect($category->show_keys); // Текущая коллекция
+
+        // Найти добавленные и удалённые ключи
+        $addedKeys = $keys->diffKeys($originalKeys);
+        $removedKeys = $originalKeys->diffKeys($keys);
+
+        // Создать структуру для новых `addedKeys`
+        $addedValues = $addedKeys->mapWithKeys(function ($value, $key) {
             $slug = Str::slug($key);
             return [
                 $slug => [
@@ -43,26 +49,29 @@ class CategoryObserver
                 ]
             ];
         })->toArray();
-        $products = $category->products()->get();
-        $products->each(function ($product) use ($values) {
-            $existingValues = $product->values ?? []; // Текущие характеристики продукта
 
-            // Обновляем только отсутствующие ключи или изменяем slug
-            foreach ($values as $slug => $newValue) {
-                if (isset($existingValues[$slug])) {
-                    // Если ключ уже существует, обновляем только name и code
-                    $existingValues[$slug]['name'] = $newValue['name'];
-                    $existingValues[$slug]['code'] = $newValue['code'];
-                } else {
-                    // Добавляем новые ключи
-                    $existingValues[$slug] = $newValue;
-                }
+        // Удалить значения для `removedKeys`
+        $removedSlugs = $removedKeys->mapWithKeys(function ($value, $key) {
+            return [Str::slug($key) => null];
+        })->keys()->toArray();
+
+        // Обновляем продукты
+        $products = $category->products()->get();
+        $products->each(function ($product) use ($addedValues, $removedSlugs) {
+            // Добавляем новые значения
+            $productValues = $product->values ?? [];
+            $productValues = array_merge($productValues, $addedValues);
+
+            // Удаляем значения по slug'ам
+            foreach ($removedSlugs as $slug) {
+                unset($productValues[$slug]);
             }
 
-            $product->values = $existingValues;
+            $product->values = $productValues;
             $product->save();
         });
     }
+
     /**
      * Handle the Category "deleted" event.
      */
