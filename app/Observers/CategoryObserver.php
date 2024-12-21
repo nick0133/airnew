@@ -45,7 +45,21 @@ class CategoryObserver
         })->toArray();
         $products = $category->products()->get();
         $products->each(function ($product) use ($values) {
-            $product->values = array_merge($product->values ?? [], $values);
+            $existingValues = $product->values ?? []; // Текущие характеристики продукта
+
+            // Обновляем только отсутствующие ключи или изменяем slug
+            foreach ($values as $slug => $newValue) {
+                if (isset($existingValues[$slug])) {
+                    // Если ключ уже существует, обновляем только name и code
+                    $existingValues[$slug]['name'] = $newValue['name'];
+                    $existingValues[$slug]['code'] = $newValue['code'];
+                } else {
+                    // Добавляем новые ключи
+                    $existingValues[$slug] = $newValue;
+                }
+            }
+
+            $product->values = $existingValues;
             $product->save();
         });
     }
