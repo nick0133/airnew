@@ -181,13 +181,13 @@
                                     </a>
                                     <nav class="nav_menu">
                                         @foreach (\App\Models\Category::parentGet()->get() as $category)
-                                            <a href="{{ route('catalog.id', $category->slug) }}">
-                                                <span class="nav_menu_icons">
-                                                    <img src="{{ $category->image_path }}"
-                                                        alt="{{ $category->name }}" class="svg1">
-                                                </span>
-                                                <span class="nav_menu_names">{{ $category->name }}</span>
-                                            </a>
+                                        <a href="{{ route('catalog.id', $category->slug) }}">
+                                            <span class="nav_menu_icons">
+                                                <img src="{{ $category->image_path }}"
+                                                    alt="{{ $category->name }}" class="svg1">
+                                            </span>
+                                            <span class="nav_menu_names">{{ $category->name }}</span>
+                                        </a>
                                         @endforeach
                                     </nav>
                                 </li>
@@ -394,7 +394,7 @@
                 $('.page').css('transform', "scale(" + ($('body').width() / 400) + ")");
                 $('.logo').attr('src', '/images/logo-mob.png');
                 //$('.page').css('transform',"scale(1)");
-                $('.swiper-slide-active img').attr('src', "{{asset{'images/slider-mob-1.png')}}");
+                $('.swiper-slide-active img').attr('src', "{{ asset('images/slider-mob-1.png') }}");
 
             } else {
                 $('.page').css('transform', "scale(" + ($('body').width() / 1440) + ")");

@@ -41,8 +41,8 @@ class Product extends Model implements HasMedia
             ->generateSlugsFrom('name')
             ->saveSlugsTo('slug');
     }
-    public function getValuesAttribute($attr)
-    {
-        return array_column(json_decode($attr, 1), null, 'code');
-    }
+    // public function getValuesAttribute($attr)
+    // {
+    // return array_column(json_decode($attr, 1), null, 'code');
+    // }
 }

@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Category;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
@@ -18,6 +19,44 @@ class CategoryObserver
     /**
      * Handle the Category "updated" event.
      */
+
+    private function updateKeys(Collection $fromTo, Collection $products)
+    {
+        $products->each(function ($product) use ($fromTo) {
+            $values = json_encode($product->values, JSON_UNESCAPED_UNICODE);
+            foreach ($fromTo as $key => $value) {
+                $values = str_replace($key, $value, $values);
+            }
+            $product->values = json_decode($values, true);
+            $product->save();
+        });
+    }
+
+    private function addKeys(Collection $addedKeys, Collection $products)
+    {
+        $values = $addedKeys->mapWithKeys(function ($value, $key) {
+            $slug = Str::slug($key);
+            return [
+                $slug => [
+                    "name" => $key,
+                    "code" => $slug,
+                    "value" => ""
+                ]
+            ];
+        })->toArray();
+        $products->each(function ($product) use ($values) {
+            $product->values = array_merge($product->values ?? [], $values);
+            $product->save();
+        });
+    }
+
+    private function slugArray(Collection $array)
+    {
+        return $array->mapWithKeys(function ($key) {
+            return [$key => Str::slug($key)];
+        });
+    }
+
     public function updated(Category $category): void
     {
         if (is_null($category->parent_id)) {
@@ -31,47 +70,46 @@ class CategoryObserver
             }
         }
 
-        $originalKeys = collect($category->getOriginal('show_keys')); // Оригинальная коллекция
-        $keys = collect($category->show_keys); // Текущая коллекция
-
-        // Найти добавленные и удалённые ключи
-        $addedKeys = $keys->diffKeys($originalKeys);
-        $removedKeys = $originalKeys->diffKeys($keys);
-
-        // Создать структуру для новых `addedKeys`
-        $addedValues = $addedKeys->mapWithKeys(function ($value, $key) {
-            $slug = Str::slug($key);
-            return [
-                $slug => [
-                    "name" => $key,
-                    "code" => $slug,
-                    "value" => ""
-                ]
-            ];
-        })->toArray();
-
-        // Удалить значения для `removedKeys`
-        $removedSlugs = $removedKeys->mapWithKeys(function ($value, $key) {
-            return [Str::slug($key) => null];
-        })->keys()->toArray();
-
-        // Обновляем продукты
         $products = $category->products()->get();
-        $products->each(function ($product) use ($addedValues, $removedSlugs) {
-            // Добавляем новые значения
-            $productValues = $product->values ?? [];
-            $productValues = array_merge($productValues, $addedValues);
+        $originalKeys = collect($category->getOriginal('show_keys')); // Преобразуем в коллекцию для удобства
+        $keys = collect($category->show_keys); // Текущее состояние также в коллекцию
+        $changes = $keys->diffKeys($originalKeys);
+        $updated = [];
+        $added = [];
+        if ($originalKeys->count() === $keys->count()) {
+            $oldKeys = $originalKeys->diffKeys($keys)->keys();
+            $newKeys = $keys->diffKeys($originalKeys)->keys();
 
-            // Удаляем значения по slug'ам
-            foreach ($removedSlugs as $slug) {
-                unset($productValues[$slug]);
+            $updated = $oldKeys->combine($newKeys);
+            if (!$updated->isEmpty()) {
+                $this->updateKeys($updated, $products);
             }
+        } else if ($originalKeys->count() < $keys->count()) {
+            $added = $keys->diffKeys($originalKeys);
+            // dd($changes, $added);
 
-            $product->values = $productValues;
-            $product->save();
-        });
+            if (!$added->isEmpty()) {
+                $this->addKeys($added, $products);
+            }
+        }
+
+        // dd($updated, $added);
+        // $values = $changes->mapWithKeys(function ($value, $key) {
+        //     $slug = Str::slug($key);
+        //     return [
+        //         $slug => [
+        //             "name" => $key,
+        //             "code" => $slug,
+        //             "value" => ""
+        //         ]
+        //     ];
+        // })->toArray();
+        // $products = $category->products()->get();
+        // $products->each(function ($product) use ($values) {
+        //     $product->values = array_merge($product->values ?? [], $values);
+        //     $product->save();
+        // });
     }
-
     /**
      * Handle the Category "deleted" event.
      */
