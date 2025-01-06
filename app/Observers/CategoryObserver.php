@@ -63,7 +63,7 @@ class CategoryObserver
             return [$key => $key];
         })->flatMap(function ($item) {
             return $item;
-        })->toArray();
+        });
     }
 
     public function updated(Category $category): void
@@ -103,7 +103,10 @@ class CategoryObserver
         }
 
         $config = Configuration::first();
-        $config->disable_filters = array_merge($this->getDisableFilters(collect($category->show_keys)), $config->disable_filters);
+        $newDisableFilters = $this->getDisableFilters($keys);
+        $configDisableFilters = collect($config->disable_filters);
+        $configDisableFilters->merge($newDisableFilters);
+        $config->disable_filters = $configDisableFilters->toArray();
         $config->save();
         // dd($updated, $added);
         // $values = $changes->mapWithKeys(function ($value, $key) {
