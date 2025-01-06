@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Category;
+use App\Models\Configuration;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -50,11 +51,19 @@ class CategoryObserver
         });
     }
 
-    private function slugArray(Collection $array)
+    private function getDisableFilters(Collection $array)
     {
-        return $array->mapWithKeys(function ($key) {
-            return [$key => Str::slug($key)];
-        });
+        return $array->map(function ($value, $key) {
+            return [Str::slug($key) => $value];
+        })->flatMap(function ($item) {
+            return $item;
+        })->filter(function ($value) {
+            return $value === "0";
+        })->map(function ($value, $key) {
+            return [$key => $key];
+        })->flatMap(function ($item) {
+            return $item;
+        })->toArray();
     }
 
     public function updated(Category $category): void
@@ -93,6 +102,9 @@ class CategoryObserver
             }
         }
 
+        $config = Configuration::first();
+        $config->disable_filters = array_merge($this->getDisableFilters(collect($category->show_keys)), $config->disable_filters);
+        $config->save();
         // dd($updated, $added);
         // $values = $changes->mapWithKeys(function ($value, $key) {
         //     $slug = Str::slug($key);
