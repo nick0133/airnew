@@ -5,6 +5,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SearchController;
+use App\Models\Configuration;
 use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 use Maatwebsite\Excel\Facades\Excel;
@@ -19,7 +20,15 @@ use Maatwebsite\Excel\Facades\Excel;
 |
 */
 
-Route::get('/test', function () {});
+Route::get('/test', function () {
+    $config = Configuration::first();
+    $configFilters = collect($config->disable_filters);
+    $newDisableFilters = collect(["cocomelon" => "cocomelon", "ct3en" => "ct3en"]);
+    $disableFilters = $configFilters->merge($newDisableFilters)->unique()->toArray();
+    $config->disable_filters = $disableFilters;
+    $config->save();
+    dd($config->disable_filters);
+});
 
 
 Route::get('/products/export', function (\Illuminate\Http\Request $request) {

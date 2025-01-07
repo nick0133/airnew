@@ -103,10 +103,10 @@ class CategoryObserver
         }
 
         $config = Configuration::first();
+        $configFilters = collect($config->disable_filters);
         $newDisableFilters = $this->getDisableFilters($keys);
-        $configDisableFilters = collect($config->disable_filters);
-        $configDisableFilters->merge($newDisableFilters);
-        $config->disable_filters = $configDisableFilters->toArray();
+        $disableFilters = $configFilters->merge($newDisableFilters)->unique()->toArray();
+        $config->disable_filters = $disableFilters;
         $config->save();
         // dd($updated, $added);
         // $values = $changes->mapWithKeys(function ($value, $key) {
